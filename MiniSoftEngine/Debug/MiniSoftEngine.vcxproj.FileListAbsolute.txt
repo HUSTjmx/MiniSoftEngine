@@ -1,0 +1,2 @@
+C:\Users\ZoroD\source\repos\MiniSoftEngine\Debug\MiniSoftEngine.exe
+D:\Projects\MSE\MiniSoftEngine\Debug\MiniSoftEngine.exe

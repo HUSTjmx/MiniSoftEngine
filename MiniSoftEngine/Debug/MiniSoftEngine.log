@@ -1,0 +1,73 @@
+﻿  App.cpp
+D:\Projects\MSE\MiniSoftEngine\App.cpp(26,22): warning C4305: “=”: 从“double”到“float”截断
+D:\Projects\MSE\MiniSoftEngine\App.cpp(43,35): warning C4302: “类型强制转换”: 从“LPWSTR”到“WORD”截断
+D:\Projects\MSE\MiniSoftEngine\App.cpp(47,42): warning C4302: “类型强制转换”: 从“LPWSTR”到“WORD”截断
+  MSE_Camera.cpp
+D:\Projects\MSE\MiniSoftEngine\MSE_Camera.cpp(57,31): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+D:\Projects\MSE\MiniSoftEngine\MSE_Camera.cpp(58,16): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+D:\Projects\MSE\MiniSoftEngine\MSE_Camera.cpp(59,31): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+D:\Projects\MSE\MiniSoftEngine\MSE_Camera.cpp(98,11): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+D:\Projects\MSE\MiniSoftEngine\MSE_Camera.cpp(99,11): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+D:\Projects\MSE\MiniSoftEngine\MSE_Camera.cpp(100,11): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+D:\Projects\MSE\MiniSoftEngine\MSE_Camera.cpp(101,11): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+D:\Projects\MSE\MiniSoftEngine\MSE_Camera.cpp(103,9): warning C4838: 从“double”转换到“float”需要收缩转换
+D:\Projects\MSE\MiniSoftEngine\MSE_Camera.cpp(103,9): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+D:\Projects\MSE\MiniSoftEngine\MSE_Camera.cpp(104,14): warning C4838: 从“double”转换到“float”需要收缩转换
+D:\Projects\MSE\MiniSoftEngine\MSE_Camera.cpp(104,14): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+D:\Projects\MSE\MiniSoftEngine\MSE_Camera.cpp(105,20): warning C4838: 从“double”转换到“float”需要收缩转换
+D:\Projects\MSE\MiniSoftEngine\MSE_Camera.cpp(105,20): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+D:\Projects\MSE\MiniSoftEngine\MSE_Camera.cpp(114,31): warning C4244: “-=”: 从“double”转换到“float”，可能丢失数据
+  MSE_Config.cpp
+D:\Projects\MSE\MiniSoftEngine\MSE_Config.cpp(68,27): warning C4305: “参数”: 从“double”到“float”截断
+D:\Projects\MSE\MiniSoftEngine\MSE_Config.cpp(71,27): warning C4305: “参数”: 从“double”到“float”截断
+D:\Projects\MSE\MiniSoftEngine\MSE_Config.cpp(80,77): warning C4305: “参数”: 从“double”到“float”截断
+D:\Projects\MSE\MiniSoftEngine\MSE_Config.cpp(94,22): warning C4305: “=”: 从“double”到“float”截断
+D:\Projects\MSE\MiniSoftEngine\MSE_Config.cpp(96,25): warning C4305: “=”: 从“double”到“float”截断
+D:\Projects\MSE\MiniSoftEngine\MSE_Config.cpp(97,23): warning C4305: “=”: 从“double”到“float”截断
+D:\Projects\MSE\MiniSoftEngine\MSE_Config.cpp(100,38): warning C4305: “参数”: 从“double”到“float”截断
+D:\Projects\MSE\MiniSoftEngine\MSE_Config.cpp(103,25): warning C4305: “=”: 从“double”到“float”截断
+D:\Projects\MSE\MiniSoftEngine\MSE_Config.cpp(104,23): warning C4305: “=”: 从“double”到“float”截断
+  MSE_FrameBuffer.cpp
+  MSE_Material.cpp
+D:\Projects\MSE\MiniSoftEngine\MSE_Material.cpp(10,21): warning C4305: “=”: 从“double”到“float”截断
+D:\Projects\MSE\MiniSoftEngine\MSE_Material.cpp(14,18): warning C4244: “=”: 从“double”转换到“int”，可能丢失数据
+D:\Projects\MSE\MiniSoftEngine\MSE_Material.cpp(26,18): warning C4244: “=”: 从“double”转换到“int”，可能丢失数据
+D:\Projects\MSE\MiniSoftEngine\MSE_Material.cpp(38,18): warning C4244: “=”: 从“double”转换到“int”，可能丢失数据
+D:\Projects\MSE\MiniSoftEngine\MSE_Material.cpp(50,18): warning C4244: “=”: 从“double”转换到“int”，可能丢失数据
+D:\Projects\MSE\MiniSoftEngine\MSE_Material.cpp(58,27): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+D:\Projects\MSE\MiniSoftEngine\MSE_Material.cpp(64,44): warning C4305: “参数”: 从“double”到“float”截断
+D:\Projects\MSE\MiniSoftEngine\MSE_Material.cpp(66,11): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+D:\Projects\MSE\MiniSoftEngine\MSE_Material.cpp(67,31): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+D:\Projects\MSE\MiniSoftEngine\MSE_Material.cpp(77,41): warning C4305: “参数”: 从“double”到“float”截断
+  MSE_Math.cpp
+D:\Projects\MSE\MiniSoftEngine\MSE_Math.cpp(69,16): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+D:\Projects\MSE\MiniSoftEngine\MSE_Math.cpp(81,11): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+D:\Projects\MSE\MiniSoftEngine\MSE_Math.cpp(276,17): warning C4244: “return”: 从“double”转换到“float”，可能丢失数据
+D:\Projects\MSE\MiniSoftEngine\MSE_Math.cpp(329,64): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+D:\Projects\MSE\MiniSoftEngine\MSE_Math.cpp(329,49): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+D:\Projects\MSE\MiniSoftEngine\MSE_Math.cpp(329,34): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+D:\Projects\MSE\MiniSoftEngine\MSE_Math.cpp(329,19): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+  MSE_Object.cpp
+D:\Projects\MSE\MiniSoftEngine\MSE_Object.cpp(139,21): warning C4018: “<”: 有符号/无符号不匹配
+D:\Projects\MSE\MiniSoftEngine\MSE_Object.cpp(215,34): warning C4305: “参数”: 从“double”到“float”截断
+  MSE_Pipeline.cpp
+D:\Projects\MSE\MiniSoftEngine\MSE_BRDF.hpp(3,10): warning C4067: 预处理器指令后有意外标记 - 应输入换行符
+D:\Projects\MSE\MiniSoftEngine\MSE_BRDF.hpp(11,53): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+D:\Projects\MSE\MiniSoftEngine\MSE_BRDF.hpp(16,14): warning C4244: “return”: 从“double”转换到“float”，可能丢失数据
+D:\Projects\MSE\MiniSoftEngine\MSE_BRDF.hpp(27,19): warning C4244: “return”: 从“double”转换到“float”，可能丢失数据
+D:\Projects\MSE\MiniSoftEngine\MSE_BRDF.hpp(32,19): warning C4244: “return”: 从“double”转换到“float”，可能丢失数据
+D:\Projects\MSE\MiniSoftEngine\MSE_BRDF.hpp(40,37): warning C4305: “参数”: 从“double”到“float”截断
+D:\Projects\MSE\MiniSoftEngine\MSE_BRDF.hpp(58,15): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+D:\Projects\MSE\MiniSoftEngine\MSE_Pipeline.cpp(23,21): warning C4018: “<”: 有符号/无符号不匹配
+D:\Projects\MSE\MiniSoftEngine\MSE_Pipeline.cpp(33,22): warning C4018: “<”: 有符号/无符号不匹配
+D:\Projects\MSE\MiniSoftEngine\MSE_Pipeline.cpp(66,19): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+D:\Projects\MSE\MiniSoftEngine\MSE_Pipeline.cpp(67,19): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+D:\Projects\MSE\MiniSoftEngine\MSE_Pipeline.cpp(68,19): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+  MSE_Render.cpp
+D:\Projects\MSE\MiniSoftEngine\MSE_Render.cpp(48,32): warning C4244: “参数”: 从“int”转换到“float”，可能丢失数据
+D:\Projects\MSE\MiniSoftEngine\MSE_Render.cpp(52,21): warning C4018: “<”: 有符号/无符号不匹配
+D:\Projects\MSE\MiniSoftEngine\MSE_Render.cpp(61,56): warning C4244: “=”: 从“int”转换到“float”，可能丢失数据
+D:\Projects\MSE\MiniSoftEngine\MSE_Render.cpp(64,22): warning C4018: “<”: 有符号/无符号不匹配
+  MSE_Texture.cpp
+  正在生成代码...
+  MiniSoftEngine.vcxproj -> D:\Projects\MSE\MiniSoftEngine\Debug\MiniSoftEngine.exe
