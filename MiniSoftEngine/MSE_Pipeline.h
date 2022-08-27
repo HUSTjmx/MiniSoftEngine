@@ -8,18 +8,8 @@
 namespace MSE {
 
 	class PostPass;
-
-	class vertShader
-	{
-	public:
-		virtual void Process(const Vertex& v, Vertex& v_R, const Matrix4x4& model, std::shared_ptr<Camera> camera, Vec4 param1 = Vec4(), Vec4 param2 = Vec4());
-	};
-
-	class fragShader
-	{
-	public:
-		virtual void Process(std::vector<Fragment>& frags, FrameBuffer& fbo, const std::vector<Light>& lights, const std::shared_ptr<Camera>& camera, std::shared_ptr<Material> material, Vec4 param1 = Vec4(), Vec4 param2 = Vec4());
-	};
+	class vertShader;
+	class fragShader;
 
 	enum class StencilOp
 	{

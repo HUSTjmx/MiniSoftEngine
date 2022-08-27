@@ -6,6 +6,9 @@
 
 namespace MSE {
 
+	class FrameBuffer;
+	class Camera;
+
 	enum class ObjType {
 		opaque,
 		transparent,
@@ -29,6 +32,7 @@ namespace MSE {
 		Vec4 normal;
 		Vec4 color;
 		Vec4 posWS;
+		Vec4 UV;
 	};
 
 	class Facet {
@@ -73,7 +77,7 @@ namespace MSE {
 	class Object {
 	public:
 
-		Object(std::vector<Facet> p);
+		Object(std::shared_ptr<std::vector<Facet>> p);
 
 		Object(const std::vector<float>& vertices, const std::vector<int>& layout);
 
@@ -84,7 +88,7 @@ namespace MSE {
 		Matrix4x4& CalModelMat();
 
 	public:
-		std::vector<Facet> facets;
+		std::shared_ptr<std::vector<Facet>> facets;
 		std::shared_ptr<Material> material;
 		ObjType type;
 
@@ -106,6 +110,9 @@ namespace MSE {
 		Vec4 dir;
 		Vec4 color;
 		float power;
+		bool CanCastShadow;
+		std::shared_ptr<FrameBuffer> fbo;
+		std::shared_ptr<Camera> camera;
 	};
 
 	class Scene

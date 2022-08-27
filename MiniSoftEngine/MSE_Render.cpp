@@ -1,4 +1,5 @@
 #include "MSE_Render.h"
+#include "MSE_Shader.h"
 
 namespace MSE {
 
@@ -45,8 +46,8 @@ namespace MSE {
 	void Render::Draw(Scene& scene, Pipeline& pipe, FrameBuffer& fbo, std::shared_ptr<Camera> camera)
 	{
 		camera->GetViewMat();
-		camera->GetProjMat(fbo.width / fbo.height);
-		camera->GetOrthoMat(20, 20);
+		if(camera->projectionType == CameraType::Perspective)camera->GetProjMat(fbo.width / fbo.height);
+		else camera->GetOrthoMat(30, 30);
 
 		// 渲染不透明材质
 		for (int i = 0; i < scene.OpaqueObjects.size(); i++)
@@ -61,9 +62,9 @@ namespace MSE {
 				pipe.stencilValue = scene.OpaqueObjects[i].material->stencilValue;
 			}
 
-			for (int j = 0; j < scene.OpaqueObjects[i].facets.size(); j++)
+			for (int j = 0; j < scene.OpaqueObjects[i].facets->size(); j++)
 			{
-				auto facet = scene.OpaqueObjects[i].facets[j];
+				auto facet = (*scene.OpaqueObjects[i].facets)[j];
 
 				// 顶点着色器
 				pipe.vert->Process(facet.p1, facet.p1_R, scene.OpaqueObjects[i].modelMat, camera);
@@ -73,9 +74,9 @@ namespace MSE {
 				facet.p1_R.pos.HomogenousDivide();
 				facet.p2_R.pos.HomogenousDivide();
 				facet.p3_R.pos.HomogenousDivide();
-				auto p1 = facet.p1_R;
-				auto p2 = facet.p2_R;
-				auto p3 = facet.p3_R;
+				Vertex& p1 = facet.p1_R;
+				Vertex& p2 = facet.p2_R;
+				Vertex& p3 = facet.p3_R;
 				// 视锥体剔除
 				if (pipe.ViewClip(p1.pos))continue;
 				if (pipe.ViewClip(p2.pos))continue;
@@ -95,10 +96,6 @@ namespace MSE {
 				}
 				else
 				{
-					facet.p1_R = p1;
-					facet.p2_R = p2;
-					facet.p3_R = p3;
-
 					// 光栅化
 					std::vector<Fragment> frags;
 					pipe.Rasterize(facet, fbo, frags);

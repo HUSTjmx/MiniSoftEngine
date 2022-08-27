@@ -1,8 +1,21 @@
 #include "MSE_FrameBuffer.h"
 #include "MSE_Texture.h"
+#include "MSE_Config.h"
 
 namespace MSE
 {
+	void FrameBuffer::Init(int width, int height, int ColorAttachNum, int DepthAttachNum)
+	{
+		this->width = width;
+		this->height = height;
+		std::shared_ptr<MSE::Texture> colorAttach = std::make_shared<MSE::Texture>(MSE::Texture(width, height));
+		colorAttach->type = MSE::TextureType::Color;
+		std::shared_ptr<MSE::Texture> depthAttach = std::make_shared<MSE::Texture>(MSE::Texture(width, height));
+		depthAttach->type = MSE::TextureType::Depth;
+		colorAttachments.push_back(colorAttach);
+		depthAttachments.push_back(depthAttach);
+	}
+
 	void FrameBuffer::DrawColorAttach(int x, int y, const Vec4& col, unsigned int index /* = 0 */)
 	{
 		if (x < 0 || x >= width || y < 0 || y >= height)return;
@@ -109,6 +122,15 @@ namespace MSE
 			for (int j = 0; j < height; j++)
 			{
 				colorAttachments[index]->contents[j][i] = colorAttachments[index]->contents[j][i] * 255;
+			}
+	}
+
+	void FrameBuffer::ChangeDepthRange(unsigned int index)
+	{
+		for (int i = 0; i < width; i++)
+			for (int j = 0; j < height; j++)
+			{
+				depthAttachments[index]->contents[j][i].x = depthAttachments[index]->contents[j][i].x * 255;
 			}
 	}
 

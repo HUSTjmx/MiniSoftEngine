@@ -28,6 +28,7 @@
     <ClCompile Include="MSE_Object.cpp" />
     <ClCompile Include="MSE_Pipeline.cpp" />
     <ClCompile Include="MSE_Render.cpp" />
+    <ClCompile Include="MSE_Shader.cpp" />
     <ClCompile Include="MSE_Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -41,6 +42,7 @@
     <ClInclude Include="MSE_Pipeline.h" />
     <ClInclude Include="MSE_PostPass.h" />
     <ClInclude Include="MSE_Render.h" />
+    <ClInclude Include="MSE_Shader.h" />
     <ClInclude Include="MSE_Texture.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

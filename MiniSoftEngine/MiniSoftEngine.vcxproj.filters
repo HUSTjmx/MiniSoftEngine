@@ -43,6 +43,9 @@
     <ClCompile Include="MSE_FrameBuffer.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="MSE_Shader.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MSE_Math.h">
@@ -76,6 +79,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="MSE_PostPass.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="MSE_Shader.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

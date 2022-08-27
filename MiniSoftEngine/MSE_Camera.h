@@ -15,7 +15,9 @@ namespace MSE
 	class Camera
 	{
 	public:
-		Camera(Vec4 position, Vec4 up, float yaw = YAW_C, float pitch = PITCH_C);
+		Camera(Vec4 position, Vec4 up, float yaw, float pitch = PITCH_C);
+
+		Camera(Vec4 position, Vec4 front);
 		
 		// constructor with scalar values
 		Camera(float posX, float posY, float posZ, float upX, float upY, float upZ, float yaw, float pitch);
@@ -58,6 +60,8 @@ namespace MSE
 		Matrix4x4 viewMat;
 		Matrix4x4 projMat;
 		Matrix4x4 orthoMat;
+
+		bool DirectUseFront;
 	};
 }
 

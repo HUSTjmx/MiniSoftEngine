@@ -4,7 +4,7 @@ namespace MSE
 {
 	 Camera::Camera(Vec4 position, Vec4 up, float yaw, float pitch)
 	{
-		Front = Vec4(0.0f, 0.0f, -1.0f);
+		Front = Vec4(0.0f, 0.0f, 1.0f);
 		Zoom = ZOOM;
 		MovementSpeed = CAMERA_SPEED;
 		MouseSensitivity = SENSITIVITY;
@@ -16,11 +16,28 @@ namespace MSE
 
 		nearPlane = NEAR_PLANE;
 		farPlane = FAR_PLANE;
+
+		DirectUseFront = false;
 	}
+
+	 Camera::Camera(Vec4 position, Vec4 front)
+	 {
+		 Front = front;
+		 Zoom = ZOOM;
+		 MovementSpeed = CAMERA_SPEED;
+		 MouseSensitivity = SENSITIVITY;
+		 Position = position;
+		 projectionType = CameraType::Perspective;
+		 WorldUp = Vec4(0.0f, 1.0f, 0.0f, 0.0f);
+		 nearPlane = NEAR_PLANE;
+		 farPlane = FAR_PLANE;
+
+		 DirectUseFront = true;
+	 }
 
 	Camera::Camera(float posX, float posY, float posZ, float upX, float upY, float upZ, float yaw, float pitch)
 	{
-		Front = Vec4(0.0f, 0.0f, -1.0f);
+		Front = Vec4(0.0f, 0.0f, 1.0f);
 		Zoom = ZOOM;
 		MovementSpeed = CAMERA_SPEED;
 		MouseSensitivity = SENSITIVITY;
@@ -31,6 +48,8 @@ namespace MSE
 		projectionType = CameraType::Perspective;
 		nearPlane = NEAR_PLANE;
 		farPlane = FAR_PLANE;
+
+		DirectUseFront = false;
 	}
 
 	Camera& Camera::operator=(const Camera& c)
@@ -48,19 +67,23 @@ namespace MSE
 		this->Zoom = c.Zoom;
 		this->MovementSpeed = c.MovementSpeed;
 		this->MouseSensitivity = c.MouseSensitivity;
+		this->DirectUseFront = c.DirectUseFront;
 
 		return *this;
 	}
 	
 	Matrix4x4& Camera::GetViewMat()
 	{
-		Front.x = cos(Radians(Yaw)) * cos(Radians(Pitch));
-		Front.y = sin(Radians(Pitch));
-		Front.z = sin(Radians(Yaw)) * cos(Radians(Pitch));
-		Front.w = 0.0;
-		Front.Normalize_V3();
+		if (!DirectUseFront)
+		{
+			Front.x = cos(Radians(Yaw)) * cos(Radians(Pitch));
+			Front.y = sin(Radians(Pitch));
+			Front.z = sin(Radians(Yaw)) * cos(Radians(Pitch));
+			Front.w = 0.0;
+		}
 
 		Vec4 w = Front;
+		w.Normalize_V3();
 		Vec4 u = WorldUp.Cross_V3(w).Normalize_V3();
 		Vec4 v = w.Cross_V3(u).Normalize_V3();
 
@@ -68,7 +91,7 @@ namespace MSE
 			{u.x, v.x, w.x, 0.0f},
 			{u.y, v.y, w.y, 0.0f},
 			{u.z, v.z, w.z, 0.0f},
-			{-Position.x, -Position.y, -Position.z, 1.0}
+			{-Position.Dot_V3(u), -Position.Dot_V3(v), -Position.Dot_V3(w), 1.0}
 		};
 
 		viewMat = Matrix4x4(view);
@@ -93,22 +116,23 @@ namespace MSE
 
 	Matrix4x4& Camera::GetOrthoMat(float width, float height)
 	{
-		float n = nearPlane;
-		float f = farPlane;
-		float r = Position.x + width * 0.5;
-		float l = Position.x - width * 0.5;
-		float t = Position.y + height * 0.5;
-		float b = Position.y - height * 0.5;
+		float n = Position.z + nearPlane;
+		float f = Position.z + farPlane;
+		float r = Position.x + width * 0.5f;
+		float l = Position.x - width * 0.5f;
+		float t = Position.y + height * 0.5f;
+		float b = Position.y - height * 0.5f;
 		float ortho[4][4] = {
-			{2.0 / (r - l), 0.0, 0.0, 0.0},
-			{0.0, 2.0 / (t - b), 0.0, 0.0},
-			{0.0, 0.0, -2.0 / (f - n), 0.0},
-			{-(r + l) / (r - l), - (t + b) / (t - b), -(f + b) / (f - n), 1.0}
+			{2.0f / (r - l), 0.0f, 0.0f, 0.0f},
+			{0.0f, 2.0f / (t - b), 0.0f, 0.0f},
+			{0.0f, 0.0f, -2.0f / (f - n), 0.0f},
+			{-(r + l) / (r - l), - (t + b) / (t - b), -(f + n) / (n - f), 1.0f}
 		};
 
 		orthoMat = Matrix4x4(ortho);
 		return orthoMat;
 	}
+
 	void Camera::ProcessMouseScroll(float offset)
 	{
 		Zoom -= (float)offset * 0.05;
@@ -122,8 +146,8 @@ namespace MSE
 		xoffset *= MouseSensitivity;
 		yoffset *= MouseSensitivity;
 
-		Yaw += xoffset;
-		Pitch += yoffset;
+		Yaw -= xoffset;
+		Pitch -= yoffset;
 
 		// make sure that when pitch is out of bounds, screen doesn't get flipped
 		if (constrainPitch)

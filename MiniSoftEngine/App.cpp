@@ -6,6 +6,7 @@
 #include "MSE_Texture.h"
 #include "MSE_Object.h"
 #include "MSE_Pipeline.h"
+#include "MSE_Shader.h"
 
 // 全局变量
 static MSE::Render render;
@@ -15,6 +16,27 @@ void InitData()
 	MSE::DATA::SetupMaterialList();
 }
 
+void InitScene(MSE::Scene& scene)
+{
+	MSE::Light sun(MSE::LIGHT::colors[0], MSE::LIGHT::dirs[0], MSE::LIGHT::powers[0]);
+	sun.CanCastShadow = true;
+	scene.lights.push_back(sun);
+
+	MSE::Object cube_01(MSE::GEOMETRY::GetCubeObj());
+	cube_01.material = MSE::DATA::GetStaticMaterial(0);
+	cube_01.position = MSE::Vec4(0.0, 0.0, 0.0, 1.0);
+	cube_01.scale = MSE::Vec4(1.0, 2.5, 2.0, 1.0);
+	cube_01.rotate = MSE::Vec4(10.0, 20.0, 0.0, 1.0);
+	scene.OpaqueObjects.push_back(cube_01);
+
+	MSE::Object plane_Ground(MSE::GEOMETRY::GetPlaneObj());
+	plane_Ground.material = MSE::DATA::GetStaticMaterial(1);
+	plane_Ground.position = MSE::Vec4(0.0, -1.0, 0.0, 1.0);
+	plane_Ground.scale = MSE::Vec4(1.0, 1.0, 1.0, 1.0);
+	plane_Ground.rotate = MSE::Vec4(10.0, 10.0, 0.0, 1.0);
+	scene.OpaqueObjects.push_back(plane_Ground);
+}
+
 void SetUpPipeLine(MSE::Pipeline& pipe)
 {
 	pipe.UseStencil = false;
@@ -22,7 +44,7 @@ void SetUpPipeLine(MSE::Pipeline& pipe)
 	pipe.MSAA_Level = 2;
 	pipe.NeedFlipY = true;
 	pipe.ToneMap = 0;
-	pipe.UseGamma = true;
+	pipe.UseGamma = false;
 	pipe.gammaBase = 2.2;
 	pipe.vert = std::make_shared<MSE::vertShader>();
 	pipe.frag = std::make_shared<MSE::fragShader>();
@@ -87,29 +109,17 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
 	// 渲染器初始化
 	render.InitRender(MSE::SCR_WIDTH, MSE::SCR_HEIGHT, hWnd);
 	render.renderType = MSE::RenderType::Normal; /* 测试 */
-	render.mainCamera = std::make_shared<MSE::Camera>(MSE::Vec4(0.0f, 0.0f, -10.0f, 1.0f), MSE::Vec4(0.0f, 1.0f, 0.0f, 0.0f));
+	render.mainCamera = std::make_shared<MSE::Camera>(MSE::Vec4(0.0f, 8.0f, -5.0f, 1.0f), MSE::Vec4(0.0f, 1.0f, 0.0f, 0.0f), MSE::YAW_C);
+	//render.mainCamera->projectionType = MSE::CameraType::Ortho;
+	//render.mainCamera->DirectUseFront = true;
 
 	// 主FBO初始化
 	MSE::FrameBuffer mainPresentFBO;
-	mainPresentFBO.width = MSE::SCR_WIDTH;
-	mainPresentFBO.height = MSE::SCR_HEIGHT;
-	std::shared_ptr<MSE::Texture> colorAttach = std::make_shared<MSE::Texture>(MSE::Texture(mainPresentFBO.width, mainPresentFBO.height));
-	colorAttach->type = MSE::TextureType::Color;
-	std::shared_ptr<MSE::Texture> depthAttach = std::make_shared<MSE::Texture>(MSE::Texture(mainPresentFBO.width, mainPresentFBO.height));
-	depthAttach->type = MSE::TextureType::Depth;
-	mainPresentFBO.colorAttachments.push_back(colorAttach);
-	mainPresentFBO.depthAttachments.push_back(depthAttach);
+	mainPresentFBO.Init(MSE::SCR_WIDTH, MSE::SCR_HEIGHT);
 
 	// 场景初始化
 	MSE::Scene scene;
-	MSE::Light sun(MSE::LIGHT::colors[0], MSE::LIGHT::dirs[0], MSE::LIGHT::powers[0]);
-	scene.lights.push_back(sun);
-	MSE::Object cube_01(MSE::GEOMETRY::cube_01_Vertices, MSE::GEOMETRY::cube_01_Layouts);
-	cube_01.material = MSE::DATA::GetStaticMaterial(0);
-	cube_01.position = MSE::Vec4(0.0, 0.0, 0.0, 1.0);
-	//cube_01.scale = MSE::Vec4(1.0, 0.5, 2.0, 1.0);
-	cube_01.rotate = MSE::Vec4(10.0, 10.0, 0.0, 1.0);
-	scene.OpaqueObjects.push_back(cube_01);
+	InitScene(scene);
 
 	// 管道初始化
 	MSE::Pipeline pipe;
@@ -133,9 +143,9 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
 			mainPresentFBO.ResetDepth(1.0);
 			mainPresentFBO.ResetStencil(0.0);
 
-
+			//
+			//render.Draw(scene, pipe, mainPresentFBO, scene.lights[0].camera);
 			render.Draw(scene, pipe, mainPresentFBO);
-
 
 			// Final Post Processing
 			pipe.ToneMapping(mainPresentFBO);
@@ -145,6 +155,8 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
 			if (pipe.NeedFlipY) mainPresentFBO.Flip_Y_Color();
 			mainPresentFBO.ChangeColRange();
 			mainPresentFBO.TranslateCol(render.g_frameBuff);
+			//mainPresentFBO.ChangeDepthRange();
+			//mainPresentFBO.TranslateDepth(render.g_frameBuff);
 			render.update(hWnd);
 		}
 	}

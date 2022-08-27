@@ -1,4 +1,6 @@
 #include "MSE_Object.h"
+#include "MSE_FrameBuffer.h"
+#include "MSE_Camera.h"
 #include <iostream>
 
 namespace MSE {
@@ -36,6 +38,7 @@ namespace MSE {
 		normal = other.normal;
 		color = other.color;
 		posWS = other.posWS;
+		UV = other.UV;
 	}
 
 	Facet::Facet()
@@ -100,7 +103,7 @@ namespace MSE {
 		return *this;
 	}
 
-	Object::Object(std::vector<Facet> p)
+	Object::Object(std::shared_ptr<std::vector<Facet>> p)
 	{
 		facets = p;
 		material = nullptr;
@@ -161,7 +164,7 @@ namespace MSE {
 			if (layout.size() >= 2)temp.p3.normal = Vec4(vertices[startPos[2] + 3], vertices[startPos[2] + 4], vertices[startPos[2] + 5], 0.0);
 			if (layout.size() >= 3)temp.p3.color = Vec4(vertices[startPos[2] + 6], vertices[startPos[2] + 7], vertices[startPos[2] + 8], 0.0);
 
-			facets.push_back(temp);
+			facets->push_back(temp);
 		}
 	}
 
@@ -214,6 +217,10 @@ namespace MSE {
 		dir = Vec4(0.0, -1.0, 0.0, 0.0);
 		color = Vec4(0.8, 0.8, 0.8, 0.0);
 		power = 10.0;
+		CanCastShadow = false;
+		fbo = std::make_shared<FrameBuffer>();
+		camera = std::make_shared<Camera>(Vec4(0.0, 4.0, -5.0), dir);
+		camera->projectionType = CameraType::Ortho;
 	}
 
 	Light::Light(Vec4 c, Vec4 d, float p)
@@ -221,6 +228,10 @@ namespace MSE {
 		dir = d;
 		color = c;
 		power = p;
+		CanCastShadow = false;
+		fbo = std::make_shared<FrameBuffer>();
+		camera = std::make_shared<Camera>(Vec4(0.0, 4.0, -5.0), dir);
+		camera->projectionType = CameraType::Ortho;
 	}
 
 }

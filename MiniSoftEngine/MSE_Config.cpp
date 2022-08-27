@@ -1,5 +1,7 @@
 #include "MSE_Config.h"
 #include "MSE_Material.h"
+#include "MSE_Object.h"
+#include <iostream>
 
 namespace MSE
 {
@@ -7,7 +9,7 @@ namespace MSE
 	const unsigned int SCR_HEIGHT = 600;
 
 	const float YAW_C = 90.0f;
-	const float PITCH_C = 0.0f;
+	const float PITCH_C = -45.0f;
 	const float ZOOM = 45.0f;
     const float CAMERA_SPEED = 2.5f;
 	const float SENSITIVITY = 0.1f;
@@ -61,6 +63,104 @@ namespace MSE
 			-0.5f, 0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f// bottom-left   
 		};
 		const std::vector<int> cube_01_Layouts = { 3, 3, 3 };
+
+		const std::vector<float> plane_01_Vertices = {
+			// Positions          // Normals         // Texture Coords
+			5.0f, -0.5f, 5.0f, 0.0f, -1.0f, 0.0f, 5.0f, 0.0f,
+			-5.0f, -0.5f, -5.0f, 0.0f, -1.0f, 0.0f, 0.0f, 5.0f,
+			-5.0f, -0.5f, 5.0f, 0.0f, -1.0f, 0.0f, 0.0f, 0.0f,
+
+			5.0f, -0.5f, 5.0f, 0.0f, -1.0f, 0.0f, 5.0f, 0.0f,
+			5.0f, -0.5f, -5.0f, 0.0f, -1.0f, 0.0f, 5.0f, 5.0f,
+			-5.0f, -0.5f, -5.0f, 0.0f, -1.0f, 0.0f, 0.0f, 5.0f
+		};
+		const std::vector<int> plane_01_Layouts = { 3, 3, 2 };
+
+		std::shared_ptr<std::vector<Facet>> GetCubeObj()
+		{
+			static std::shared_ptr<std::vector<Facet>> cube = std::make_shared<std::vector<Facet>>();
+			if (cube->size() >= 2)return cube;
+			const std::vector<float>& vertices = cube_01_Vertices;
+			const std::vector<int>& layout = cube_01_Layouts;
+
+			int offset = 0;
+			for (int i = 0; i < layout.size(); i++)
+				offset += layout[i];
+
+			int pointsNum = vertices.size() / offset;
+			if (vertices.size() % offset != 0)
+				std::cout << "Vertices Data Is Error!" << std::endl;
+
+			for (int i = 0; i < pointsNum; i += 3)
+			{
+				std::vector<int> startPos(3, 0);
+				startPos[0] = i * offset;
+				startPos[1] = startPos[0] + offset;
+				startPos[2] = startPos[1] + offset;
+
+				Facet temp;
+				temp.p1.pos = Vec4(vertices[startPos[0]], vertices[startPos[0] + 1], vertices[startPos[0] + 2], 1.0);
+				if (layout.size() >= 2)temp.p1.normal = Vec4(vertices[startPos[0] + 3], vertices[startPos[0] + 4], vertices[startPos[0] + 5], 0.0);
+				if (layout.size() >= 3 && layout[2] == 3)temp.p1.color = Vec4(vertices[startPos[0] + 6], vertices[startPos[0] + 7], vertices[startPos[0] + 8], 0.0);
+				else temp.p1.UV = Vec4(vertices[startPos[0] + 6], vertices[startPos[0] + 7], 0.0, 0.0);
+
+				temp.p2.pos = Vec4(vertices[startPos[1]], vertices[startPos[1] + 1], vertices[startPos[1] + 2], 1.0);
+				if (layout.size() >= 2)temp.p2.normal = Vec4(vertices[startPos[1] + 3], vertices[startPos[1] + 4], vertices[startPos[1] + 5], 0.0);
+				if (layout.size() >= 3 && layout[2] == 3)temp.p2.color = Vec4(vertices[startPos[1] + 6], vertices[startPos[1] + 7], vertices[startPos[1] + 8], 0.0);
+				else temp.p2.UV = Vec4(vertices[startPos[1] + 6], vertices[startPos[1] + 7], 0.0, 0.0);
+
+				temp.p3.pos = Vec4(vertices[startPos[2]], vertices[startPos[2] + 1], vertices[startPos[2] + 2], 1.0);
+				if (layout.size() >= 2)temp.p3.normal = Vec4(vertices[startPos[2] + 3], vertices[startPos[2] + 4], vertices[startPos[2] + 5], 0.0);
+				if (layout.size() >= 3 && layout[2] == 3)temp.p3.color = Vec4(vertices[startPos[2] + 6], vertices[startPos[2] + 7], vertices[startPos[2] + 8], 0.0);
+				else temp.p3.UV = Vec4(vertices[startPos[2] + 6], vertices[startPos[2] + 7], 0.0, 0.0);
+
+				cube->push_back(temp);
+			}
+			return cube;
+		}
+
+		std::shared_ptr<std::vector<Facet>> GetPlaneObj()
+		{
+			static std::shared_ptr<std::vector<Facet>> plane = std::make_shared<std::vector<Facet>>();
+			if (plane->size() >= 2)return plane;
+			const std::vector<float>& vertices = plane_01_Vertices;
+			const std::vector<int>& layout = plane_01_Layouts;
+
+			int offset = 0;
+			for (int i = 0; i < layout.size(); i++)
+				offset += layout[i];
+
+			int pointsNum = vertices.size() / offset;
+			if (vertices.size() % offset != 0)
+				std::cout << "Vertices Data Is Error!" << std::endl;
+
+			for (int i = 0; i < pointsNum; i += 3)
+			{
+				std::vector<int> startPos(3, 0);
+				startPos[0] = i * offset;
+				startPos[1] = startPos[0] + offset;
+				startPos[2] = startPos[1] + offset;
+
+				Facet temp;
+				temp.p1.pos = Vec4(vertices[startPos[0]], vertices[startPos[0] + 1], vertices[startPos[0] + 2], 1.0);
+				if (layout.size() >= 2)temp.p1.normal = Vec4(vertices[startPos[0] + 3], vertices[startPos[0] + 4], vertices[startPos[0] + 5], 0.0);
+				if (layout.size() >= 3 && layout[2] == 3)temp.p1.color = Vec4(vertices[startPos[0] + 6], vertices[startPos[0] + 7], vertices[startPos[0] + 8], 0.0);
+				else temp.p1.UV = Vec4(vertices[startPos[0] + 6], vertices[startPos[0] + 7], 0.0, 0.0);
+
+				temp.p2.pos = Vec4(vertices[startPos[1]], vertices[startPos[1] + 1], vertices[startPos[1] + 2], 1.0);
+				if (layout.size() >= 2)temp.p2.normal = Vec4(vertices[startPos[1] + 3], vertices[startPos[1] + 4], vertices[startPos[1] + 5], 0.0);
+				if (layout.size() >= 3 && layout[2] == 3)temp.p2.color = Vec4(vertices[startPos[1] + 6], vertices[startPos[1] + 7], vertices[startPos[1] + 8], 0.0);
+				else temp.p2.UV = Vec4(vertices[startPos[1] + 6], vertices[startPos[1] + 7], 0.0, 0.0);
+
+				temp.p3.pos = Vec4(vertices[startPos[2]], vertices[startPos[2] + 1], vertices[startPos[2] + 2], 1.0);
+				if (layout.size() >= 2)temp.p3.normal = Vec4(vertices[startPos[2] + 3], vertices[startPos[2] + 4], vertices[startPos[2] + 5], 0.0);
+				if (layout.size() >= 3 && layout[2] == 3)temp.p3.color = Vec4(vertices[startPos[2] + 6], vertices[startPos[2] + 7], vertices[startPos[2] + 8], 0.0);
+				else temp.p3.UV = Vec4(vertices[startPos[2] + 6], vertices[startPos[2] + 7], 0.0, 0.0);
+
+				plane->push_back(temp);
+			}
+			return plane;
+		}
 	}
 
 	namespace LIGHT {
@@ -68,7 +168,7 @@ namespace MSE
 			Vec4(0.9, 0.9, 0.9, 1.0)
 		};
 		const std::vector<Vec4> dirs = {
-			Vec4(0.0, 0.0, 0.7, 0.0)
+			Vec4(-0.3, -0.7, 0.0, 0.0)
 		};
 		const std::vector<float> powers = {
 			10
@@ -98,7 +198,7 @@ namespace MSE
 
 			std::shared_ptr<Material> m2 = std::make_shared<Material>();
 			m2->baseColor = Vec4(0.5, 0.3, 0.5);
-			m2->metallic = 1.0;
+			m2->metallic = 0.3;
 			m2->emissive = 0.0;
 			m2->reflectance = 0.3;
 			m2->roughness = 0.1;
@@ -112,5 +212,7 @@ namespace MSE
 		{
 			return materialList[index];
 		}
+
+		
 	}
 }

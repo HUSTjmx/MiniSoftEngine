@@ -9,6 +9,8 @@ namespace MSE {
 
 	class FrameBuffer {
 	public:
+		void Init(int width, int height, int ColorAttachNum = 1, int DepthAttachNum = 1);
+
 		void DrawColorAttach(int x, int y, const Vec4& col, unsigned int index = 0);
 
 		Vec4 GetColorAttachElem(int x, int y, unsigned int index = 0);
@@ -34,6 +36,8 @@ namespace MSE {
 		void Flip_Y_Color(unsigned int index = 0);
 
 		void ChangeColRange(unsigned int index = 0);
+
+		void ChangeDepthRange(unsigned int index = 0);
 
 	public:
 		int width;
