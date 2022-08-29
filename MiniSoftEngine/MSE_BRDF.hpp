@@ -1,10 +1,15 @@
 #pragma once
 #include <cmath>
 #include "MSE_Math.h";
+#include "MSE_Object.h"
+#include "MSE_FrameBuffer.h"
+#include "MSE_Texture.h"
 
-namespace MSE
+using namespace MSE;
+
+namespace SHADER
 {
-	namespace SHADER
+	namespace BRDF
 	{
 		static Vec4 BRDF_F_Schlick(float VoH, Vec4 f0, float f90)
 		{
@@ -30,6 +35,58 @@ namespace MSE
 		static float BRDF_Specular_BlinPhong(const Vec4& N, const Vec4& H, int shininess)
 		{
 			return std::pow(std::max(Dot_V3(N, H), 0.0f), shininess);
+		}
+	}
+
+	namespace SHADOW
+	{
+		static float SHADOW_HARD_ShadowMap(const Light& light, const Vec4& pos, const Vec4& N)
+		{
+			//Vec4 fragPosLightSpace = pos;
+			Vec4 fragPosLightSpace = Transform(pos, light.camera->viewMat);
+			fragPosLightSpace = Transform(fragPosLightSpace, light.camera->orthoMat);
+			// Í¸ÊÓ³ý·¨
+			fragPosLightSpace.HomogenousDivide();
+			// ±ä»»·¶Î§
+			fragPosLightSpace = fragPosLightSpace * 0.5f + 0.5f;
+		
+
+		///	float closestDepth = (*light.fbo->depthAttachments[0]->contents)[0][0].x;
+			float closestDepth = Sample(light.fbo->GetDepthAttach(), fragPosLightSpace.x, fragPosLightSpace.y).x;
+			float currentDepth = fragPosLightSpace.z;
+			Vec4 L = light.dir;
+			float bias = std::max(0.01 * (1.0 - Dot_V3(N, L * -1)), 0.001);
+			float shadow = currentDepth - bias > closestDepth ? 1.0 : 0.0;
+			//return 0.0;
+			return shadow;
+		}
+
+		static float SHADOW_SOFT_PCF(const Light& light, const Vec4& pos, const Vec4& N)
+		{
+			//Vec4 fragPosLightSpace = pos;
+			Vec4 fragPosLightSpace = Transform(pos, light.camera->viewMat);
+			fragPosLightSpace = Transform(fragPosLightSpace, light.camera->orthoMat);
+			// Í¸ÊÓ³ý·¨
+			fragPosLightSpace.HomogenousDivide();
+			// ±ä»»·¶Î§
+			fragPosLightSpace = fragPosLightSpace * 0.5f + 0.5f;
+
+
+			///	float closestDepth = (*light.fbo->depthAttachments[0]->contents)[0][0].x;
+			float currentDepth = fragPosLightSpace.z;
+			Vec4 L = light.dir;
+			float bias = std::max(0.05 * (1.0 - Dot_V3(N, L * -1)), 0.005);
+			float shadow = 0.0;
+			float xSize = 1.0f / (float)light.fbo->width, ySize = 1.0f / (float)light.fbo->height ;
+			for(float x = -1.0f; x <= 1.0f; x += 1.0f)
+				for (float y = -1.0; y <= 1.0f; y += 1.0f)
+				{
+					float closestDepth = Sample(light.fbo->GetDepthAttach(), fragPosLightSpace.x + x * xSize, fragPosLightSpace.y + y * ySize).x;
+					shadow += currentDepth - bias > closestDepth ? 1.0f : 0.0f;
+				}
+
+			//return 0.0;
+			return shadow / 9.0f;
 		}
 	}
 

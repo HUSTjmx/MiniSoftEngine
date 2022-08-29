@@ -84,5 +84,8 @@
     <ClInclude Include="MSE_Shader.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="MSE_DesignPattern.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

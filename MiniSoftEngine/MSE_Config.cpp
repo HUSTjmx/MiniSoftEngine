@@ -13,7 +13,7 @@ namespace MSE
 	const float ZOOM = 45.0f;
     const float CAMERA_SPEED = 2.5f;
 	const float SENSITIVITY = 0.1f;
-	const float  NEAR_PLANE = 0.1f;
+	const float NEAR_PLANE = 0.1f;
 	const float FAR_PLANE = 100.0f;
 
 
@@ -66,13 +66,13 @@ namespace MSE
 
 		const std::vector<float> plane_01_Vertices = {
 			// Positions          // Normals         // Texture Coords
-			5.0f, -0.5f, 5.0f, 0.0f, -1.0f, 0.0f, 5.0f, 0.0f,
-			-5.0f, -0.5f, -5.0f, 0.0f, -1.0f, 0.0f, 0.0f, 5.0f,
-			-5.0f, -0.5f, 5.0f, 0.0f, -1.0f, 0.0f, 0.0f, 0.0f,
+			5.0f, -0.5f, 5.0f, 0.0f, 1.0f, 0.0f, 5.0f, 0.0f,
+			-5.0f, -0.5f, -5.0f, 0.0f, 1.0f, 0.0f, 0.0f, 5.0f,
+			-5.0f, -0.5f, 5.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f,
 
-			5.0f, -0.5f, 5.0f, 0.0f, -1.0f, 0.0f, 5.0f, 0.0f,
-			5.0f, -0.5f, -5.0f, 0.0f, -1.0f, 0.0f, 5.0f, 5.0f,
-			-5.0f, -0.5f, -5.0f, 0.0f, -1.0f, 0.0f, 0.0f, 5.0f
+			5.0f, -0.5f, 5.0f, 0.0f, 1.0f, 0.0f, 5.0f, 0.0f,
+			5.0f, -0.5f, -5.0f, 0.0f, 1.0f, 0.0f, 5.0f, 5.0f,
+			-5.0f, -0.5f, -5.0f, 0.0f, 1.0f, 0.0f, 0.0f, 5.0f
 		};
 		const std::vector<int> plane_01_Layouts = { 3, 3, 2 };
 
@@ -168,7 +168,7 @@ namespace MSE
 			Vec4(0.9, 0.9, 0.9, 1.0)
 		};
 		const std::vector<Vec4> dirs = {
-			Vec4(-0.3, -0.7, 0.0, 0.0)
+			Vec4(-0.5, -0.5, 0.0, 0.0)
 		};
 		const std::vector<float> powers = {
 			10
@@ -190,15 +190,15 @@ namespace MSE
 		{
 			// 基本电介质材质_01
 			std::shared_ptr<Material> m1 = std::make_shared<Material>();
-			m1->baseColor = Vec4(0.5, 0.0, 0.5);
+			m1->baseColor = Vec4(0.5, 0.2, 0.5);
 			m1->metallic = 0.1;
 			m1->emissive = 0.0;
 			m1->reflectance = 0.3;
 			m1->roughness = 0.1;
 
 			std::shared_ptr<Material> m2 = std::make_shared<Material>();
-			m2->baseColor = Vec4(0.5, 0.3, 0.5);
-			m2->metallic = 0.3;
+			m2->baseColor = Vec4(0.5, 0.3, 1.0);
+			m2->metallic = 0.1;
 			m2->emissive = 0.0;
 			m2->reflectance = 0.3;
 			m2->roughness = 0.1;

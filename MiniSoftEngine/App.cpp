@@ -20,20 +20,22 @@ void InitScene(MSE::Scene& scene)
 {
 	MSE::Light sun(MSE::LIGHT::colors[0], MSE::LIGHT::dirs[0], MSE::LIGHT::powers[0]);
 	sun.CanCastShadow = true;
+	sun.fbo->Init(MSE::SCR_WIDTH, MSE::SCR_HEIGHT, 1, 1);
+	sun.camera->DirectUseFront = true;
 	scene.lights.push_back(sun);
 
 	MSE::Object cube_01(MSE::GEOMETRY::GetCubeObj());
 	cube_01.material = MSE::DATA::GetStaticMaterial(0);
-	cube_01.position = MSE::Vec4(0.0, 0.0, 0.0, 1.0);
-	cube_01.scale = MSE::Vec4(1.0, 2.5, 2.0, 1.0);
-	cube_01.rotate = MSE::Vec4(10.0, 20.0, 0.0, 1.0);
+	cube_01.position = MSE::Vec4(0.0, 0.7, 0.0, 1.0);
+	cube_01.scale = MSE::Vec4(1.0, 1.0, 1.0, 1.0);
+	cube_01.rotate = MSE::Vec4(0.0, 45.0, 0.0, 1.0);
 	scene.OpaqueObjects.push_back(cube_01);
 
 	MSE::Object plane_Ground(MSE::GEOMETRY::GetPlaneObj());
 	plane_Ground.material = MSE::DATA::GetStaticMaterial(1);
-	plane_Ground.position = MSE::Vec4(0.0, -1.0, 0.0, 1.0);
+	plane_Ground.position = MSE::Vec4(0.0, 0.0, 0.0, 1.0);
 	plane_Ground.scale = MSE::Vec4(1.0, 1.0, 1.0, 1.0);
-	plane_Ground.rotate = MSE::Vec4(10.0, 10.0, 0.0, 1.0);
+	plane_Ground.rotate = MSE::Vec4(0.0, 0.0, 0.0, 1.0);
 	scene.OpaqueObjects.push_back(plane_Ground);
 }
 
@@ -46,8 +48,8 @@ void SetUpPipeLine(MSE::Pipeline& pipe)
 	pipe.ToneMap = 0;
 	pipe.UseGamma = false;
 	pipe.gammaBase = 2.2;
-	pipe.vert = std::make_shared<MSE::vertShader>();
-	pipe.frag = std::make_shared<MSE::fragShader>();
+	pipe.vert = std::make_shared<MSE::vertShader>(MSE::vertShader());
+	//pipe.frag = std::make_shared<MSE::fragShader>(MSE::fragShader::Instance());
 }
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
@@ -109,9 +111,9 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
 	// 渲染器初始化
 	render.InitRender(MSE::SCR_WIDTH, MSE::SCR_HEIGHT, hWnd);
 	render.renderType = MSE::RenderType::Normal; /* 测试 */
-	render.mainCamera = std::make_shared<MSE::Camera>(MSE::Vec4(0.0f, 8.0f, -5.0f, 1.0f), MSE::Vec4(0.0f, 1.0f, 0.0f, 0.0f), MSE::YAW_C);
-	//render.mainCamera->projectionType = MSE::CameraType::Ortho;
-	//render.mainCamera->DirectUseFront = true;
+	render.mainCamera = std::make_shared<MSE::Camera>(MSE::Vec4(0.0f, 8.3f, -5.0f, 1.0f), MSE::Vec4(0.0f, 1.0f, 0.0f, 0.0f), MSE::YAW_C);
+	render.mainCamera->projectionType = MSE::CameraType::Perspective;
+	render.mainCamera->DirectUseFront = false;
 
 	// 主FBO初始化
 	MSE::FrameBuffer mainPresentFBO;
@@ -124,7 +126,6 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
 	// 管道初始化
 	MSE::Pipeline pipe;
 	SetUpPipeLine(pipe);
-
 
 	// 1.4 消息循环
 	MSG msg = {};
@@ -139,24 +140,36 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
 		{
 			// Clear
 			render.ClearBuffer();
-			mainPresentFBO.ResetCol(MSE::COLOR::BgColor);
-			mainPresentFBO.ResetDepth(1.0);
-			mainPresentFBO.ResetStencil(0.0);
+			mainPresentFBO.Reset(MSE::COLOR::BgColor, 0.0, 0.0);
+			for (int i = 0; i < scene.lights.size(); i++)
+				scene.lights[i].fbo->ResetDepth(1.0);
 
-			//
-			//render.Draw(scene, pipe, mainPresentFBO, scene.lights[0].camera);
+			// 绘制shadowMap
+			pipe.frag = std::make_shared<MSE::fragShader_DepthDraw>(MSE::fragShader_DepthDraw());
+			pipe.vert = std::make_shared<MSE::vertShader>(MSE::vertShader());
+
+			//scene.lights[0].camera->projectionType = MSE::CameraType::Ortho;
+
+			for(int i = 0; i < scene.lights.size(); i++)
+				if(scene.lights[i].CanCastShadow)render.Draw(scene, pipe, *scene.lights[i].fbo, scene.lights[i].camera);
+			
+			// 正式
+			//scene.lights[0].camera->projectionType = MSE::CameraType::Perspective;
+			pipe.frag = std::make_shared<MSE::fragShader>(MSE::fragShader());
+			pipe.vert = std::make_shared<MSE::vertShaderWithPosInLightSpace>(MSE::vertShaderWithPosInLightSpace());
 			render.Draw(scene, pipe, mainPresentFBO);
 
 			// Final Post Processing
 			pipe.ToneMapping(mainPresentFBO);
 			pipe.GammaCorrection(mainPresentFBO);
 
-			// Final
+			// Final FBO Op
 			if (pipe.NeedFlipY) mainPresentFBO.Flip_Y_Color();
 			mainPresentFBO.ChangeColRange();
 			mainPresentFBO.TranslateCol(render.g_frameBuff);
-			//mainPresentFBO.ChangeDepthRange();
-			//mainPresentFBO.TranslateDepth(render.g_frameBuff);
+			//scene.lights[0].fbo->ChangeDepthRange();
+			//scene.lights[0].fbo->TranslateDepth(render.g_frameBuff);
+			//mainPresentFBO = *scene.lights[0].fbo;
 			render.update(hWnd);
 		}
 	}

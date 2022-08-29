@@ -70,6 +70,7 @@ namespace MSE
 			x *= w_inv;
 			y *= w_inv;
 			z *= w_inv;
+			w = w;
 		}
 	
 		return *this;
@@ -291,6 +292,11 @@ namespace MSE
 
 	Vec4 BaryCentric(const Vec4& a, const Vec4& b, const Vec4& c, const Vec4& p)
 	{
+		/*float beta = ((p.y - a.y) * (c.x - a.x) - (p.x - a.x) * (c.y - a.y)) / ((b.y - a.y) * (c.x - a.x) - (b.x - a.x) * (c.y - a.y));
+		float gamma = ((p.y - a.y) * (b.x - a.x) - (p.x - a.x) * (b.y - a.y)) / ((c.y - a.y) * (b.x - a.x) - (c.x - a.x) * (b.y - a.y));
+		float alpha = 1.0f - beta - gamma;
+		return Vec4(alpha, beta, gamma, 0.0);*/
+
 		Vec4 v1(c.x - a.x, b.x - a.x, a.x - p.x);
 		Vec4 v2(c.y - a.y, b.y - a.y, a.y - p.y);
 
@@ -300,12 +306,24 @@ namespace MSE
 		return { -1.0, 1.0, 1.0, 0.0 };
 	}
 
+	Vec4 BaryLerp(const Vec4& a, const Vec4& b, const Vec4& c, const Vec4& ret, float ZA, float ZB, float ZC, float Z)
+	{
+		Vec4 re;
+		re.x = a.x * ret.x * Z / ZA + b.x * ret.y * Z / ZB + c.x * ret.z * Z / ZC;
+		re.y = a.y * ret.x * Z / ZA + b.y * ret.y * Z / ZB + c.y * ret.z * Z / ZC;
+		re.z = a.z * ret.x * Z / ZA + b.z * ret.y * Z / ZB + c.z * ret.z * Z / ZC;
+		
+		re.w = a.w;
+		return re;
+	}
+
 	Vec4 BaryLerp(const Vec4& a, const Vec4& b, const Vec4& c, const Vec4& ret)
 	{
 		Vec4 re;
 		re.x = a.x * ret.x + b.x * ret.y + c.x * ret.z;
 		re.y = a.y * ret.x + b.y * ret.y + c.y * ret.z;
 		re.z = a.z * ret.x + b.z * ret.y + c.z * ret.z;
+
 		re.w = a.w;
 		return re;
 	}

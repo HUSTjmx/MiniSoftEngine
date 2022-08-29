@@ -32,6 +32,7 @@ namespace MSE {
 		Vec4 normal;
 		Vec4 color;
 		Vec4 posWS;
+		std::vector<Vec4> posesLightPos;
 		Vec4 UV;
 	};
 
@@ -64,6 +65,7 @@ namespace MSE {
 	public:
 		Vec4 color;
 		Vec4 posWS;
+		std::vector<Vec4> posesLightPos;
 		Vec4 normal;
 		Vec4 UV;
 		float depth;

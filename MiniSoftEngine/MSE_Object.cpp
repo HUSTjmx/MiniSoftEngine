@@ -38,6 +38,7 @@ namespace MSE {
 		normal = other.normal;
 		color = other.color;
 		posWS = other.posWS;
+		posesLightPos = other.posesLightPos;
 		UV = other.UV;
 	}
 
@@ -79,6 +80,7 @@ namespace MSE {
 		color = other.color;
 		normal = other.normal;
 		posWS = other.posWS;
+		posesLightPos = other.posesLightPos;
 		UV = other.UV;
 		depth = other.depth;
 		stencil = other.stencil;
@@ -93,6 +95,7 @@ namespace MSE {
 		color = other.color;
 		normal = other.normal;
 		posWS = other.posWS;
+		posesLightPos = other.posesLightPos;
 		UV = other.UV;
 		depth = other.depth;
 		stencil = other.stencil;
@@ -219,8 +222,10 @@ namespace MSE {
 		power = 10.0;
 		CanCastShadow = false;
 		fbo = std::make_shared<FrameBuffer>();
-		camera = std::make_shared<Camera>(Vec4(0.0, 4.0, -5.0), dir);
+		camera = std::make_shared<Camera>(Vec4(0.0, 8.0, 0.0), dir);
 		camera->projectionType = CameraType::Ortho;
+		camera->farPlane = 20.0f;
+		camera->nearPlane = 0.01f;
 	}
 
 	Light::Light(Vec4 c, Vec4 d, float p)
@@ -230,8 +235,12 @@ namespace MSE {
 		power = p;
 		CanCastShadow = false;
 		fbo = std::make_shared<FrameBuffer>();
-		camera = std::make_shared<Camera>(Vec4(0.0, 4.0, -5.0), dir);
+		//Vec4 XX = dir;
+		//XX = XX * -1;
+		camera = std::make_shared<Camera>(Vec4(0.0, 4.0, 0.0), dir);
 		camera->projectionType = CameraType::Ortho;
+		camera->farPlane = 20.0f;
+		camera->nearPlane = 0.01f;
 	}
 
 }

@@ -145,6 +145,8 @@ namespace MSE
 
 	Vec4 BaryCentric(const Vec4& a, const Vec4& b, const Vec4& c, const Vec4& p);
 
+	Vec4 BaryLerp(const Vec4& a, const Vec4& b, const Vec4& c, const Vec4& ret, float ZA, float ZB, float ZC, float Z);
+
 	Vec4 BaryLerp(const Vec4& a, const Vec4& b, const Vec4& c, const Vec4& ret);
 
 	Vec4 Reflect(Vec4& L, Vec4& N);

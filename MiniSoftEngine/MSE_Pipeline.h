@@ -27,9 +27,9 @@ namespace MSE {
 
 		bool ViewClip(const Vec4& v);
 
-		void Rasterize(Facet& facet, FrameBuffer& fbo, std::vector<Fragment>& re, Vec4 param1 = Vec4(), Vec4 param2 = Vec4());
+		void Rasterize(Facet& facet, FrameBuffer& fbo, std::vector<Fragment>& re, std::shared_ptr<Camera> camera, Vec4 param1 = Vec4(), Vec4 param2 = Vec4());
 
-		bool EarlyZTest(FrameBuffer& fbo, int x, int y, float depth);
+		bool EarlyZTest(FrameBuffer& fbo, int x, int y, float depth, CameraType type_);
 
 		bool EarlyStencilTest(FrameBuffer& fbo, int x, int y);
 

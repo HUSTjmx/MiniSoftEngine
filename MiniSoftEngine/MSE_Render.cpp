@@ -47,7 +47,8 @@ namespace MSE {
 	{
 		camera->GetViewMat();
 		if(camera->projectionType == CameraType::Perspective)camera->GetProjMat(fbo.width / fbo.height);
-		else camera->GetOrthoMat(30, 30);
+		else camera->GetOrthoMat(10, 10);
+
 
 		// 渲染不透明材质
 		for (int i = 0; i < scene.OpaqueObjects.size(); i++)
@@ -67,9 +68,9 @@ namespace MSE {
 				auto facet = (*scene.OpaqueObjects[i].facets)[j];
 
 				// 顶点着色器
-				pipe.vert->Process(facet.p1, facet.p1_R, scene.OpaqueObjects[i].modelMat, camera);
-				pipe.vert->Process(facet.p2, facet.p2_R, scene.OpaqueObjects[i].modelMat, camera);
-				pipe.vert->Process(facet.p3, facet.p3_R, scene.OpaqueObjects[i].modelMat, camera);
+				pipe.vert->Process(facet.p1, facet.p1_R, scene.OpaqueObjects[i].modelMat, camera, scene.lights);
+				pipe.vert->Process(facet.p2, facet.p2_R, scene.OpaqueObjects[i].modelMat, camera, scene.lights);
+				pipe.vert->Process(facet.p3, facet.p3_R, scene.OpaqueObjects[i].modelMat, camera, scene.lights);
 				// 齐次除法
 				facet.p1_R.pos.HomogenousDivide();
 				facet.p2_R.pos.HomogenousDivide();
@@ -98,7 +99,7 @@ namespace MSE {
 				{
 					// 光栅化
 					std::vector<Fragment> frags;
-					pipe.Rasterize(facet, fbo, frags);
+					pipe.Rasterize(facet, fbo, frags, camera);
 
 					// 像素着色器
 					pipe.frag->Process(frags, fbo, scene.lights, camera, scene.OpaqueObjects[i].material);

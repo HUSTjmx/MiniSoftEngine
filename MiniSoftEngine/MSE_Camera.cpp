@@ -95,7 +95,8 @@ namespace MSE
 		};
 
 		viewMat = Matrix4x4(view);
-
+		//viewMat.Transpose();
+		//viewMat.ExChange();
 		return viewMat;
 	}
 
@@ -110,27 +111,40 @@ namespace MSE
 		};
 
 		projMat = Matrix4x4(proj);
+		//projMat.Transpose();
+		//projMat.ExChange();
 		return projMat;
 
 	}
 
 	Matrix4x4& Camera::GetOrthoMat(float width, float height)
 	{
-		float n = Position.z + nearPlane;
-		float f = Position.z + farPlane;
-		float r = Position.x + width * 0.5f;
-		float l = Position.x - width * 0.5f;
-		float t = Position.y + height * 0.5f;
-		float b = Position.y - height * 0.5f;
+		float n = nearPlane;
+		float f = farPlane;
+		float r = width * 0.5f;
+		float l = -width * 0.5f;
+		float t = height * 0.5f;
+		float b = -height * 0.5f;
+
 		float ortho[4][4] = {
-			{2.0f / (r - l), 0.0f, 0.0f, 0.0f},
-			{0.0f, 2.0f / (t - b), 0.0f, 0.0f},
-			{0.0f, 0.0f, -2.0f / (f - n), 0.0f},
-			{-(r + l) / (r - l), - (t + b) / (t - b), -(f + n) / (n - f), 1.0f}
+			{2.0f / (r - l), 0.0f, 0.0f, -(r + l) / (r - l)},
+			{0.0f, 2.0f / (t - b), 0.0f, -(t + b) / (t - b)},
+			{0.0f, 0.0f, 1.0f / (f - n), -n / (f - n)},
+			{0.0f, 0.0f, 0.0f, 1.0f}
 		};
 
 		orthoMat = Matrix4x4(ortho);
+		//orthoMat.Transpose();
+		//orthoMat.ExChange();
 		return orthoMat;
+	}
+
+	Matrix4x4& Camera::GetPMat()
+	{
+		if (projectionType == CameraType::Ortho)
+			return orthoMat;
+		else
+			return projMat;
 	}
 
 	void Camera::ProcessMouseScroll(float offset)

@@ -1,6 +1,8 @@
-﻿  MSE_Render.cpp
-D:\Projects\MSE\MiniSoftEngine\MSE_Render.cpp(49,85): warning C4244: “参数”: 从“int”转换到“float”，可能丢失数据
-D:\Projects\MSE\MiniSoftEngine\MSE_Render.cpp(53,21): warning C4018: “<”: 有符号/无符号不匹配
-D:\Projects\MSE\MiniSoftEngine\MSE_Render.cpp(62,56): warning C4244: “=”: 从“int”转换到“float”，可能丢失数据
-D:\Projects\MSE\MiniSoftEngine\MSE_Render.cpp(65,22): warning C4018: “<”: 有符号/无符号不匹配
+﻿  App.cpp
+D:\Projects\MSE\MiniSoftEngine\App.cpp(29,49): warning C4305: “参数”: 从“double”到“float”截断
+D:\Projects\MSE\MiniSoftEngine\App.cpp(50,22): warning C4305: “=”: 从“double”到“float”截断
+D:\Projects\MSE\MiniSoftEngine\App.cpp(67,35): warning C4302: “类型强制转换”: 从“LPWSTR”到“WORD”截断
+D:\Projects\MSE\MiniSoftEngine\App.cpp(71,42): warning C4302: “类型强制转换”: 从“LPWSTR”到“WORD”截断
+D:\Projects\MSE\MiniSoftEngine\App.cpp(144,22): warning C4018: “<”: 有符号/无符号不匹配
+D:\Projects\MSE\MiniSoftEngine\App.cpp(153,21): warning C4018: “<”: 有符号/无符号不匹配
   MiniSoftEngine.vcxproj -> D:\Projects\MSE\MiniSoftEngine\Debug\MiniSoftEngine.exe

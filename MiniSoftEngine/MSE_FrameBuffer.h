@@ -15,9 +15,13 @@ namespace MSE {
 
 		Vec4 GetColorAttachElem(int x, int y, unsigned int index = 0);
 
+		std::shared_ptr<Texture> GetColorAttach(unsigned int index = 0);
+
 		void DrawDepthAttach(int x, int y, float dep, unsigned int index = 0);
 
 		float GetDepthAttachElem(int x, int y, unsigned int index = 0);
+
+		std::shared_ptr<Texture> GetDepthAttach(unsigned int index = 0);
 
 		void DrawStencilAttach(int x, int y, float st, unsigned int index = 0);
 
@@ -32,6 +36,8 @@ namespace MSE {
 		void ResetDepth(float dp, unsigned int index = 0);
 
 		void ResetStencil(float dp, unsigned int index = 0);
+
+		void Reset(Vec4 col, float dp = 1.0, float st = 0.0);
 
 		void Flip_Y_Color(unsigned int index = 0);
 

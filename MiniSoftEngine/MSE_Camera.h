@@ -30,6 +30,8 @@ namespace MSE
 
 		Matrix4x4& GetOrthoMat(float width, float height);
 
+		Matrix4x4& GetPMat();
+
 		void ProcessMouseScroll(float offset);
 
 		void ProcessMouseMovement(float xoffset, float yoffset, bool constrainPitch = true);

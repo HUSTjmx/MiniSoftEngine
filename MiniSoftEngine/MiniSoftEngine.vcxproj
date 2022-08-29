@@ -35,6 +35,7 @@
     <ClInclude Include="MSE_BRDF.hpp" />
     <ClInclude Include="MSE_Camera.h" />
     <ClInclude Include="MSE_Config.h" />
+    <ClInclude Include="MSE_DesignPattern.h" />
     <ClInclude Include="MSE_FrameBuffer.h" />
     <ClInclude Include="MSE_Material.h" />
     <ClInclude Include="MSE_Math.h" />
